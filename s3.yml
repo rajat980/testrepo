@@ -1,0 +1,14 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'AWS CloudFormation Sample Template'
+Parameters:
+  BucketName: 
+    Description: Bucket name
+    Type: String
+    Default: test231578-rajat-test
+Resources:
+  S3Bucket:
+    Type: 'AWS::S3::Bucket'
+    
+    Properties:
+      BucketName: !Ref BucketName
