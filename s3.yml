@@ -5,7 +5,7 @@ Parameters:
   BucketName: 
     Description: Bucket name
     Type: String
-    Default: test231578-rajat-test
+    Default: test231578-rajat-test1
 Resources:
   S3Bucket:
     Type: 'AWS::S3::Bucket'
