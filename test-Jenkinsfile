@@ -6,15 +6,17 @@ pipeline {
     stages {
         stage('Hello') {
             steps {
-              withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "aws-cred", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                def name1= "s3bucket2" 
-                sh '''
-                  aws --version
-                  aws ec2 describe-internet-gateways
-                  aws ec2 describe-key-pairs
-                  aws cloudformation create-stack --stack-name $name1 --template-body file://s3.yml --region 'us-east-1'
-                  '''    
-              }
+              script{                                    
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "aws-cred", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+                  def name1= "s3bucket2" 
+                  sh '''
+                    aws --version
+                    aws ec2 describe-internet-gateways
+                    aws ec2 describe-key-pairs
+                    aws cloudformation create-stack --stack-name $name1 --template-body file://s3.yml --region 'us-east-1'
+                    '''    
+                }
+            }
                                 
                 }                
             }
