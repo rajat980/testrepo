@@ -11,6 +11,7 @@ pipeline {
                 sh '''
                   aws --version
                   aws ec2 describe-internet-gateways
+                  aws ec2 describe-key-pairs
                   '''    
               }
                                 
