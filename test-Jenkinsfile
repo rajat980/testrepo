@@ -7,8 +7,9 @@ pipeline {
         stage('Hello') {
             steps {
               script{                                    
+                def name1= "s3bucket2"
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "aws-cred", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                  def name1= "s3bucket2" 
+                  
                   sh '''
                     aws --version
                     aws ec2 describe-internet-gateways
