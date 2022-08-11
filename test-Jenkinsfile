@@ -13,7 +13,7 @@ pipeline {
               
               script{                                    
                 
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "aws-cred", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+                withAWS(credentials: 'aws-cred', region: 'us-east-1') {
                   
                   sh '''
                     aws --version
