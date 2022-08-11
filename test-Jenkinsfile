@@ -2,7 +2,10 @@ pipeline {
     agent any
     environment {  
         AWS_DEFAULT_REGION = "us-east-1"
-        STACK_NAME = 's3-bucket'
+        
+    }
+    parameters {
+      string(name: 'STACK_NAME', defaultValue: 'example-stack', description: 'Enter the CloudFormation Stack Name.')
     }
     stages {
         stage('Build') {
