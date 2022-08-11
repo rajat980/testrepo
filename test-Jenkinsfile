@@ -15,7 +15,7 @@ pipeline {
                     aws --version
                     aws ec2 describe-internet-gateways
                     aws ec2 describe-key-pairs
-                    aws cloudformation create-stack --stack-name ${s3-stack} --template-body file://s3.yml --region 'us-east-1'
+                    aws cloudformation create-stack --stack-name ${name1} --template-body file://s3.yml --region 'us-east-1'
                     '''    
                 }
             }
