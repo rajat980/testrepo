@@ -5,7 +5,7 @@ pipeline {
         
     }
     parameters {
-      string(name: 'STACK_NAME', defaultValue: 'example-stack1', description: 'Enter the CloudFormation Stack Name.')
+      string(name: 'STACK_NAME', defaultValue: 'example-stack13', description: 'Enter the CloudFormation Stack Name.')
     }
     stages {
         stage('Build') {
