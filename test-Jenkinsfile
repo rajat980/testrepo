@@ -5,7 +5,7 @@ pipeline {
         
     }
     parameters {
-      string(name: 'STACK_NAME', defaultValue: 'example-stack13', description: 'Enter the CloudFormation Stack Name.')
+      string(name: 'STACK_NAME', defaultValue: 'ecs-cluster', description: 'Enter the CloudFormation Stack Name.')
     }
     stages {
         stage('Build') {
@@ -19,7 +19,7 @@ pipeline {
                     aws --version
                     aws ec2 describe-internet-gateways
                     aws ec2 describe-key-pairs
-                    aws cloudformation create-stack --stack-name ${STACK_NAME} --template-body file://s3.yml --region 'us-east-1'
+                    aws cloudformation create-stack --stack-name ${STACK_NAME} --template-body file://ecs_cluster.yml --region 'us-east-1'
                     '''    
                 }
             }
