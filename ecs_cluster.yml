@@ -1,0 +1,58 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  ClusterName:
+    Type: String
+    Description: Name of the ECS cluster
+
+Resources:
+  ECSIAMPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: ECSIAMPolicy
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - "ecs:CreateCluster"
+              - "ecs:DeregisterContainerInstance"
+              - "ecs:DiscoverPollEndpoint"
+              - "ecs:Poll"
+              - "ecs:RegisterContainerInstance"
+              - "ecs:StartTelemetrySession"
+              - "ecs:Submit*"
+            Resource: "*"
+      Roles:
+        - Ref: ECSClusterRole
+
+  ECSClusterRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ECSClusterRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: ECSIAMPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "ecr:GetAuthorizationToken"
+                  - "ecr:BatchCheckLayerAvailability"
+                  - "ecr:GetDownloadUrlForLayer"
+                  - "ecr:BatchGetImage"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "*"
+
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Ref "ClusterName"
