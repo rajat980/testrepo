@@ -4,7 +4,8 @@ pipeline {
         stage('Use AWS') {
             steps {
                 
-                    sh 'aws ec2 describe-instances'
+                    sh 'aws cloudformation create-stack --stack-name ec2test --template-body cft/ec2.yaml'
+'
                 
             }
         }
