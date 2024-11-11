@@ -10,7 +10,7 @@ pipeline {
                     aws ec2 describe-key-pairs
                     aws cloudformation create-stack --stack-name ${STACK_NAME} --template-body file://cft/ec2.yml --region 'us-east-1'
                     ''' 
-'
+
                 
             }
         }
