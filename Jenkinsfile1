@@ -1,29 +1,19 @@
 pipeline {
     agent any
-    environment {  
-        AWS_DEFAULT_REGION = "us-east-1"
-        
-    }
-    parameters {
-      string(name: 'STACK_NAME', defaultValue: 'ecs-cluster', description: 'Enter the CloudFormation Stack Name.')
+    environment {
+        AWS_REGION = 'us-west-2'
     }
     stages {
-        stage('Build') {
+        stage('Use AWS CLI') {
             steps {
-              
-              script{                                    
-                
-                withAWS(credentials: 'aws-credentials', region: 'us-east-1') {
-                  
-                  sh '''
-                    aws --version
-                    aws ec2 describe-internet-gateways
-                    
-                    '''    
+                withCredentials([usernamePassword(credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                    sh '''
+                    export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+                    export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+                    aws s3 ls
+                    '''
                 }
-            }
-                                
-                }                
             }
         }
     }
+}
