@@ -1,25 +1,13 @@
 pipeline {
-    agent any
-    environment {  
-        AWS_DEFAULT_REGION = "us-east-1"
-        
-    }
-    parameters {
-      string(name: 'STACK_NAME', defaultValue: 'ecs-cluster', description: 'Enter the CloudFormation Stack Name.')
-    }
-    stages {
-        stage('Use AWS') {
-            steps {
-                
-                  sh '''
-                    aws --version
-                    aws ec2 describe-internet-gateways
-                    aws ec2 describe-key-pairs
-                    aws cloudformation create-stack --stack-name $STACK_NAME --template-body file://cft/ec2.yml --region 'us-east-1'
-                    ''' 
-
-                
-            }
-        }
+  agent any
+  environment {
+    EXAMPLE_KEY = credentials('jenkinsgit') // Secret value is 'sec%ret'
+  }
+  stages {
+    stage('Example') {
+      steps {
+          /* WRONG! */
+          bat "echo ${EXAMPLE_KEY}"
+      }
     }
 }
