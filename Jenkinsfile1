@@ -13,7 +13,7 @@ pipeline {
               
               script{                                    
                 
-                withAWS(credentials: 'aws-cred', region: 'us-east-1') {
+                withAWS(credentials: 'aws-credentials', region: 'us-east-1') {
                   
                   sh '''
                     aws --version
