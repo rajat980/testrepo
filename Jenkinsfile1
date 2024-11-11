@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        AWS_CREDS = credentials('awsmajor')  // ID of the AWS credentials you created
+        AWS_CREDS = credentials('major')  // ID of the AWS credentials you created
     }
     stages {
         stage('Deploy') {
