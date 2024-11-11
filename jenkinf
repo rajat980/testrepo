@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Generate New Pipeline') {
+            steps {
+                script {
+                    // Define the new pipeline job's configuration
+                    def newJobName = 'new-pipeline-job'
+                    def jobConfigXml = """<?xml version='1.0' encoding='UTF-8'?>
+                    <flow-definition plugin="workflow-job@2.40">
+                        <description>A new dynamically created pipeline job</description>
+                        <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.91">
+                            <script>node {
+                                echo 'This is the new generated pipeline job'
+                                // Add more pipeline stages here if necessary
+                            }</script>
+                            <sandbox>true</sandbox>
+                        </definition>
+                        <triggers/>
+                    </flow-definition>"""
+
+                    // Define the Jenkins URL and credentials
+                    def jenkinsUrl = 'http://your-jenkins-url'
+                    def jenkinsUser = 'your-jenkins-username'
+                    def jenkinsApiToken = 'your-jenkins-api-token'
+
+                    // Create the new pipeline job using the Jenkins REST API
+                    def response = httpRequest(
+                        acceptType: 'APPLICATION_JSON',
+                        contentType: 'APPLICATION_XML',
+                        httpMode: 'POST',
+                        authentication: 'jenkins-api-auth',  // Jenkins API credentials in Jenkins' credentials store
+                        url: "${jenkinsUrl}/createItem?name=${newJobName}",
+                        requestBody: jobConfigXml
+                    )
+                    
+                    // Print response for debugging
+                    echo "Response from Jenkins: ${response}"
+                }
+            }
+        }
+    }
+}
