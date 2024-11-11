@@ -1,17 +1,13 @@
 pipeline {
     agent any
-    environment {
-        AWS_CREDS = credentials('aws-credentials')  // ID of the AWS credentials you created
-    }
     stages {
-        stage('Deploy') {
+        stage('Use AWS') {
             steps {
-                withCredentials([aws(credentialsId: 'aws-credentials', region: 'us-east-1')]) {
-                    script {
-                        sh 'aws s3 ls'
-                    }
+                withAWS(credentials: 'aws-credentials', region: 'us-west-2') {
+                    sh 'aws s3 ls'
                 }
             }
         }
     }
 }
+
