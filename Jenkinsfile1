@@ -1,13 +1,28 @@
 pipeline {
     agent any
+    environment {  
+        AWS_DEFAULT_REGION = "us-east-1"
+        
+    }
+    parameters {
+      string(name: 'STACK_NAME', defaultValue: 'ecs-cluster', description: 'Enter the CloudFormation Stack Name.')
+    }
     stages {
-        stage('Use AWS') {
+        stage('Build') {
             steps {
-                withAWS(credentials: 'aws-credentials', region: 'us-west-2') {
-                    sh 'aws s3 ls'
+              
+              script{                                    
+                
+                withAWS(credentials: 'aws-cred', region: 'us-east-1') {
+                  
+                  sh '''
+                    aws --version
+
+                    '''    
                 }
+            }
+                                
+                }                
             }
         }
     }
-}
-
