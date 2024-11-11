@@ -1,0 +1,79 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'STACK_NAME', defaultValue: 'my-eks-stack', description: 'Enter the CloudFormation stack name')
+    }
+
+    environment {
+        AWS_DEFAULT_REGION = 'us-east-1' // Set your AWS region
+        CFT_FILE = 'cft/eks-cluster.yml'  // Path to CloudFormation Template (replace with your path)
+    }
+
+    stages {
+        stage('Use AWS') {
+            steps {
+                script {
+                    // Inject AWS credentials securely
+                    withCredentials([
+                        usernamePassword(
+                            credentialsId: 'aws-test', 
+                            usernameVariable: 'AWS_ACCESS_KEY_ID', 
+                            passwordVariable: 'AWS_SECRET_ACCESS_KEY'
+                        )
+                    ]) {
+                        sh '''
+                            echo "Using AWS credentials..."
+                            aws sts get-caller-identity
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Manage CloudFormation Stack') {
+            steps {
+                script {
+                    withCredentials([
+                        usernamePassword(
+                            credentialsId: 'aws-test', 
+                            usernameVariable: 'AWS_ACCESS_KEY_ID', 
+                            passwordVariable: 'AWS_SECRET_ACCESS_KEY'
+                        )
+                    ]) {
+                        sh '''
+                            echo "Checking stack: $STACK_NAME"
+                            
+                            # Define subnet IDs as default values
+                            SUBNET_IDS="subnet-058ce05b1dacbd3f5,subnet-0fe344e854b582365,subnet-078928768ceeda3a5"
+
+                            # Create parameters JSON file
+                            echo "Creating parameter JSON file with Subnet IDs..."
+                            echo "[{\"ParameterKey\": \"SubnetIds\", \"ParameterValue\": \"$SUBNET_IDS\"}]" > parameters.json
+                            
+                            # Check if stack exists
+                            if aws cloudformation describe-stacks --stack-name $STACK_NAME 2>/dev/null; then
+                                echo "Stack exists. Deleting it..."
+                                aws cloudformation delete-stack --stack-name $STACK_NAME
+                                echo "Waiting for stack deletion to complete..."
+                                aws cloudformation wait stack-delete-complete --stack-name $STACK_NAME
+                                echo "Stack deleted."
+                            else
+                                echo "Stack does not exist. Creating it..."
+                                aws cloudformation create-stack \
+                                    --stack-name $STACK_NAME \
+                                    --template-body file://${CFT_FILE} \
+                                    --parameters file://parameters.json \
+                                    --capabilities CAPABILITY_IAM \
+                                    --on-failure ROLLBACK
+                                echo "Waiting for stack creation to complete..."
+                                aws cloudformation wait stack-create-complete --stack-name $STACK_NAME
+                                echo "Stack created."
+                            fi
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}
