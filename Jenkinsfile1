@@ -18,8 +18,7 @@ pipeline {
                   sh '''
                     aws --version
                     aws ec2 describe-internet-gateways
-                    aws ec2 describe-key-pairs
-                    aws cloudformation create-stack --stack-name ${STACK_NAME} --template-body file://ecs_cluster.yml --region 'us-east-1'
+                    
                     '''    
                 }
             }
