@@ -1,5 +1,12 @@
 pipeline {
     agent any
+    environment {  
+        AWS_DEFAULT_REGION = "us-east-1"
+        
+    }
+    parameters {
+      string(name: 'STACK_NAME', defaultValue: 'ecs-cluster', description: 'Enter the CloudFormation Stack Name.')
+    }
     stages {
         stage('Use AWS') {
             steps {
