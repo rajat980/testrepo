@@ -1,14 +1,21 @@
 pipeline {
-  agent any
-  environment {
-    EXAMPLE_KEY = credentials('jenkinsgit') // Secret value is 'sec%ret'
-  }
-  stages {
-    stage('Example') {
-      steps {
-          /* WRONG! */
-          bat "echo ${EXAMPLE_KEY}"
-      }
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building..'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing..'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
+            }
+        }
     }
-  }
 }
