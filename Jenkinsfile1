@@ -4,7 +4,7 @@ pipeline {
         stage('Use AWS') {
             steps {
                 
-                    sh 'aws ec2 describe-vpcs'
+                    sh 'aws ec2 describe-instances'
                 
             }
         }
