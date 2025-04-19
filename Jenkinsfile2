@@ -36,7 +36,7 @@ pipeline {
                         // Deploy your CloudFormation template
                         sh '''
                             aws cloudformation deploy \
-                                --template-file s3.yaml \
+                                --template-file s3.yml \
                                 --stack-name my-stack-test-s3 \
                                 --capabilities CAPABILITY_NAMED_IAM
                         '''
