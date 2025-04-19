@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_DEFAULT_REGION = 'us-east-1' // Set your AWS region
+    }
+
+    stages {
+        stage('Use AWS') {
+            steps {
+                script {
+                    // Inject AWS credentials securely
+                    withCredentials([usernamePassword(
+                        credentialsId: 'aws-test', 
+                        usernameVariable: 'AWS_ACCESS_KEY_ID', 
+                        passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                            
+                        // You can now use AWS CLI commands securely
+                        sh '''
+                            echo "Using AWS credentials..."
+                            aws sts get-caller-identity
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Deploy CloudFormation') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(
+                        credentialsId: 'aws-test', 
+                        usernameVariable: 'AWS_ACCESS_KEY_ID', 
+                        passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+
+                        // Deploy your CloudFormation template
+                        sh '''
+                            aws cloudformation deploy \
+                                --template-file template.yaml \
+                                --stack-name my-stack \
+                                --capabilities CAPABILITY_NAMED_IAM
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}
