@@ -36,7 +36,7 @@ pipeline {
                         // Deploy your CloudFormation template
                         sh '''
                             aws cloudformation deploy \
-                                --template-file cft\ec2.yml \
+                                --template-file cft/ec2.yml \
                                 --stack-name my-stack-test-ec2 \
                                
                         '''
