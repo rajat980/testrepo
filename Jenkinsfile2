@@ -26,7 +26,7 @@ pipeline {
             }
         }
 
-        stage('Deploy CloudFormation') {
+        stage('Manage CloudFormation Stack') {
             steps {
                 script {
                     withCredentials([
@@ -41,19 +41,17 @@ pipeline {
 
                             # Check if stack exists
                             if aws cloudformation describe-stacks --stack-name $STACK_NAME 2>/dev/null; then
-                                echo "Stack exists. Deleting it first..."
+                                echo "Stack exists. Deleting it..."
                                 aws cloudformation delete-stack --stack-name $STACK_NAME
                                 echo "Waiting for stack deletion to complete..."
                                 aws cloudformation wait stack-delete-complete --stack-name $STACK_NAME
                                 echo "Stack deleted."
                             else
-                                echo "Stack does not exist. Proceeding to create..."
+                                echo "Stack does not exist. Creating it..."
+                                aws cloudformation deploy \
+                                    --template-file cft/ec2.yml \
+                                    --stack-name $STACK_NAME
                             fi
-
-                            # Deploy the stack
-                            aws cloudformation deploy \
-                                --template-file cft/ec2.yml \
-                                --stack-name $STACK_NAME
                         '''
                     }
                 }
