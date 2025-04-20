@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    parameters {
+        string(name: 'STACK_NAME', defaultValue: 'my-stack-test-ec2', description: 'Enter the CloudFormation stack name')
+    }
+
     environment {
         AWS_DEFAULT_REGION = 'us-east-1' // Set your AWS region
     }
@@ -37,7 +41,7 @@ pipeline {
                         )
                     ]) {
                         sh '''
-                            STACK_NAME="my-stack-test-ec2"
+                            echo "Checking stack: $STACK_NAME"
 
                             # Check if stack exists
                             if aws cloudformation describe-stacks --stack-name $STACK_NAME 2>/dev/null; then
