@@ -1,0 +1,58 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_REGION = "ap-south-1"
+        ECR_REGISTRY = "123456789012.dkr.ecr.ap-south-1.amazonaws.com"
+        ECR_REPOSITORY = "emi-calculator"
+        IMAGE_TAG = "latest"
+        EKS_CLUSTER_NAME = "your-eks-cluster-name"
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Login to AWS ECR') {
+            steps {
+                sh '''
+                aws --version || pip install awscli --upgrade
+                aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+                '''
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh '''
+                docker build -t $ECR_REPOSITORY .
+                docker tag $ECR_REPOSITORY:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+                '''
+            }
+        }
+
+        stage('Push Docker Image to ECR') {
+            steps {
+                sh '''
+                docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+                '''
+            }
+        }
+
+        stage('Deploy to EKS') {
+            steps {
+                sh '''
+                curl -o kubectl https://s3.amazonaws.com/aws-cli/kubectl/latest/kubectl-linux
+                chmod +x kubectl
+                mv kubectl /usr/local/bin/kubectl
+
+                aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
+                kubectl apply -f deployment.yaml
+                '''
+            }
+        }
+    }
+}

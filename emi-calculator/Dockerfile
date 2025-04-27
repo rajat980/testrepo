@@ -1,18 +1,18 @@
-# Use Node.js official image
-FROM node:20
+# Use official Node.js LTS base image
+FROM node:18-alpine
 
 # Set working directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copy package.json and install dependencies
-COPY package*.json ./
+COPY package.json .
 RUN npm install
 
-# Copy rest of the app
-COPY . .
+# Copy application code
+COPY app.js .
 
-# Expose the port the app runs on
+# Expose app port
 EXPOSE 3000
 
-# Run the app
-CMD ["node", "emiCalculator.js"]
+# Start the app
+CMD ["npm", "start"]

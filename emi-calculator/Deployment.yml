@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: emi-calculator-deployment
+  labels:
+    app: emi-calculator
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: emi-calculator
+  template:
+    metadata:
+      labels:
+        app: emi-calculator
+    spec:
+      containers:
+        - name: emi-calculator
+          image: <your-ecr-repo-url>:latest
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: emi-calculator-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: emi-calculator
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
