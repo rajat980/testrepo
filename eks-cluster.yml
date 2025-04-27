@@ -10,7 +10,7 @@ Parameters:
     Default: MyNodeGroup
   NodeInstanceType:
     Type: String
-    Default: t3.medium
+    Default: t1.micro
   NodeCount:
     Type: Number
     Default: 2
