@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         AWS_REGION = "us-east-1"
-        ECR_REGISTRY = "337909754579.dkr.ecr.us-east-1.amazonaws.com/emi-calculator"
+        ECR_REGISTRY = "337909754579.dkr.ecr.us-east-1.amazonaws.com"
         ECR_REPOSITORY = "emi-calculator"
         IMAGE_TAG = "latest"
         EKS_CLUSTER_NAME = "MyEksCluster"
@@ -18,10 +18,11 @@ pipeline {
 
         stage('Login to AWS ECR') {
             steps {
-                sh '''
-                aws --version || pip install awscli --upgrade
-                aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
-                '''
+                withCredentials([[$class: 'AmazonWebServicesCredentials', credentialsId: 'aws-test']]) {
+                    sh '''
+                    aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+                    '''
+                }
             }
         }
 
@@ -45,10 +46,6 @@ pipeline {
         stage('Deploy to EKS') {
             steps {
                 sh '''
-                curl -o kubectl https://s3.amazonaws.com/aws-cli/kubectl/latest/kubectl-linux
-                chmod +x kubectl
-                mv kubectl /usr/local/bin/kubectl
-
                 aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
                 kubectl apply -f deployment.yaml
                 '''
