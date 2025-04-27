@@ -63,7 +63,6 @@ pipeline {
                                 aws cloudformation create-stack \
                                     --stack-name $STACK_NAME \
                                     --template-body file://${CFT_FILE} \
-
                                     --capabilities CAPABILITY_IAM \
                                     --on-failure ROLLBACK
                                 echo "Waiting for stack creation to complete..."
