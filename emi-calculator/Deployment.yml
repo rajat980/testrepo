@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: emi-calculator
-          image: <your-ecr-repo-url>:latest
+          image: 337909754579.dkr.ecr.us-east-1.amazonaws.com/emi-calculator:latest
           ports:
             - containerPort: 3000
 ---

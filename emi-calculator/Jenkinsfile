@@ -3,10 +3,10 @@ pipeline {
 
     environment {
         AWS_REGION = "ap-south-1"
-        ECR_REGISTRY = "123456789012.dkr.ecr.ap-south-1.amazonaws.com"
+        ECR_REGISTRY = "337909754579.dkr.ecr.us-east-1.amazonaws.com/emi-calculator"
         ECR_REPOSITORY = "emi-calculator"
         IMAGE_TAG = "latest"
-        EKS_CLUSTER_NAME = "your-eks-cluster-name"
+        EKS_CLUSTER_NAME = "MyEksCluster"
     }
 
     stages {
