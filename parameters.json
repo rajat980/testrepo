@@ -1,23 +1,22 @@
 [
-    {
-      "ParameterKey": "ClusterName",
-      "ParameterValue": "MyEksCluster"
-    },
-    {
-      "ParameterKey": "NodeGroupName",
-      "ParameterValue": "MyNodeGroup"
-    },
-    {
-      "ParameterKey": "NodeInstanceType",
-      "ParameterValue": "t1.micro"
-    },
-    {
-      "ParameterKey": "NodeCount",
-      "ParameterValue": "2"
-    },
-    {
-      "ParameterKey": "SubnetIds",
-      "ParameterValue": "subnet-058ce05b5dacbd3f5,subnet-0fe344e854b582365,subnet-078928768ceeda3a5"
-    }
-  ]
-  
+  {
+    "ParameterKey": "ClusterName",
+    "ParameterValue": "MyEksCluster"
+  },
+  {
+    "ParameterKey": "NodeGroupName",
+    "ParameterValue": "MyNodeGroup"
+  },
+  {
+    "ParameterKey": "NodeInstanceType",
+    "ParameterValue": "t3.medium"
+  },
+  {
+    "ParameterKey": "NodeCount",
+    "ParameterValue": "2"
+  },
+  {
+    "ParameterKey": "SubnetIds",
+    "ParameterValue": "subnet-058ce05b5dacbd3f5,subnet-0fe344e854b582365,subnet-078928768ceeda3a5"
+  }
+]
