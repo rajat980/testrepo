@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        AWS_REGION = "ap-south-1"
+        AWS_REGION = "us-east-1"
         ECR_REGISTRY = "337909754579.dkr.ecr.us-east-1.amazonaws.com/emi-calculator"
         ECR_REPOSITORY = "emi-calculator"
         IMAGE_TAG = "latest"
