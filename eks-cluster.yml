@@ -17,7 +17,7 @@ Parameters:
   SubnetIds:
     Type: CommaDelimitedList
     Description: List of subnet IDs in the default VPC
-    Default: "subnet-058ce05b1dacbd3f5,subnet-0fe344e854b582365,subnet-078928768ceeda3a5"
+    Default: "subnet-058ce05b1dacbd3f5,subnet-0e9091c9e4ccdec4d,subnet-078928768ceeda3a5"
 
 Resources:
 
