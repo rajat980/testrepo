@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         AWS_DEFAULT_REGION = 'us-east-1' // Set your AWS region
-        CFT_FILE = 'cft/eks-cluster.yml'  // Path to CloudFormation Template (replace with your path)
+        CFT_FILE = 'eks-cluster.yml'  // Path to CloudFormation Template (replace with your path)
     }
 
     stages {
