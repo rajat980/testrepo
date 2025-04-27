@@ -53,11 +53,16 @@ pipeline {
                             
                             # Check if stack exists
                             if aws cloudformation describe-stacks --stack-name $STACK_NAME 2>/dev/null; then
-                                echo "Stack exists. Deleting it..."
-                                aws cloudformation delete-stack --stack-name $STACK_NAME
+                                echo "Stack exists. Updating it..."
+
+                                aws cloudformation update-stack  \
+                                    --stack-name $STACK_NAME \
+                                    --template-body file://${CFT_FILE} \
+                                    --capabilities CAPABILITY_IAM \
+                                    --on-failure ROLLBACK                                
                                 echo "Waiting for stack deletion to complete..."
-                                aws cloudformation wait stack-delete-complete --stack-name $STACK_NAME
-                                echo "Stack deleted."
+                                aws cloudformation wait stack-update-complete --stack-name $STACK_NAME
+                                echo "Stack updated."
                             else
                                 echo "Stack does not exist. Creating it..."
                                 aws cloudformation create-stack \
